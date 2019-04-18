@@ -6,6 +6,19 @@ def baseDir = pwd()
 def mavenRepo = "${baseDir}/.m2"
 
 node {
+    properties([
+        buildDiscarder(
+            logRotator(
+                artifactDaysToKeepStr: '',
+                artifactNumToKeepStr: '',
+                daysToKeepStr: '',
+                numToKeepStr: '20')),
+
+            pipelineTriggers([
+                cron('H 2 * * *')]
+            )
+    ])
+
     stage('Create local maven repository') {
         sh "mkdir ${mavenRepo}"
     }
@@ -42,5 +55,9 @@ node {
                 cd ${testDir}
             """
         }
+    }
+
+    stage('Publish archetype to Nexus') {
+
     }
 }
