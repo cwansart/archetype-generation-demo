@@ -3,7 +3,6 @@ def projects = [
 ]
 
 def baseDir = pwd()
-
 def mavenRepo = "${baseDir}/.m2"
 
 node {
@@ -40,6 +39,7 @@ node {
                                        -Dmaven.repo.local=${mavenRepo}
                 cd demo-app-${id}
                 mvn clean verify
+                cd ${testDir}
             """
         }
     }
