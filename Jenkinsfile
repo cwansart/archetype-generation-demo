@@ -2,10 +2,10 @@ def projects = [
     'openliberty'
 ]
 
-def baseDir = pwd()
-def mavenRepo = "${baseDir}/.m2"
-
 node {
+    def baseDir = pwd()
+    def mavenRepo = "${baseDir}/.m2"
+
     properties([
         buildDiscarder(
             logRotator(
@@ -18,6 +18,10 @@ node {
                 cron('H 2 * * *')]
             )
     ])
+
+    stage('Checkout repository') {
+        checkout scm
+    }
 
     stage('Create local maven repository') {
         sh "mkdir ${mavenRepo}"
