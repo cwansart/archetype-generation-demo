@@ -6,6 +6,9 @@ node {
     def baseDir = pwd()
     def mavenRepo = "${baseDir}/.m2"
 
+    tool name: 'jdk8', type: 'jdk'
+    tool name: 'maven3.6', type: 'maven'
+
     properties([
         buildDiscarder(
             logRotator(
