@@ -4,14 +4,20 @@ def projects = [
 
 def baseDir = pwd()
 
+def mavenRepo = "${baseDir}/.m2"
+
 node {
+    stage('Create local maven repository') {
+        sh "mkdir ${mavenRepo}"
+    }
+
     stage('Create archetypes') {
         projects.each { project ->
             sh """
                 cd ${project}
                 mvn archetype:create-from-project
                 cd target/generated-sources/archetype
-                mvn clean install
+                mvn -Dmaven.repo.local=${mavenRepo} clean install
                 cd ${baseDir}
             """
         }
@@ -30,7 +36,8 @@ node {
                                        -DarchetypeGroupId=${pom.groupId} \
                                        -DarchetypeArtifactId=${pom.artifactId} \
                                        -DarchetypeVersion=${pom.version} \
-                                       -DinteractiveMode=false
+                                       -DinteractiveMode=false \
+                                       -Dmaven.repo.local=${mavenRepo}
                 cd demo-app-${id}
                 mvn clean verify
             """
