@@ -52,8 +52,9 @@ node {
             def testDir = "${baseDir}/test-builds"
             sh "mkdir ${testDir} && cd ${testDir}"
 
-            projects.each { id, project ->
-                def pom = readMavenPom("../${project}/target/generated-sources/archetype/pom.xml")
+            def id = 1;
+            projects.each { project ->
+                def pom = readMavenPom(file: "${project}/target/generated-sources/archetype/pom.xml")
 
                 sh """
                     mvn archetype:generate -DgroupId=com.example \
@@ -67,6 +68,8 @@ node {
                     mvn clean verify
                     cd ${testDir}
                 """
+
+                id++
             }
         }
 
